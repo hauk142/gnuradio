@@ -1,6 +1,7 @@
 id: zeromq_sub_msg_source
 label: ZMQ SUB Message Source
 category: '[Core]/ZeroMQ Interfaces'
+flags: [ python, cpp ]
 
 parameters:
 -   id: address
@@ -19,5 +20,13 @@ outputs:
 templates:
     imports: from gnuradio import zeromq
     make: zeromq.sub_msg_source(${address}, ${timeout})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/zeromq/sub_msg_source.h>' ]
+    declarations: 'zeromq::sub_msg_source::sptr ${id};'
+    make: 'this->${id} = zeromq::sub_msg_source::make((char *) ${address}, ${timeout});'
+    link: ['gnuradio-zeromq']
+    translations:
+        "'": '"'
 
 file_format: 1

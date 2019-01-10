@@ -1,6 +1,7 @@
 id: zeromq_pub_msg_sink
 label: ZMQ PUB Message Sink
 category: '[Core]/ZeroMQ Interfaces'
+flags: [ python, cpp ]
 
 parameters:
 -   id: address
@@ -19,5 +20,14 @@ inputs:
 templates:
     imports: from gnuradio import zeromq
     make: zeromq.pub_msg_sink(${address}, ${timeout})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/zeromq/pub_msg_sink.h>' ]
+    declarations: 'zeromq::pub_msg_sink::sptr ${id};'
+    make: 'this->${id} = zeromq::pub_msg_sink::make((char *) ${address}, ${timeout});'
+    link: ['gnuradio-zeromq']
+    translations:
+        "'": '"'
+
     
 file_format: 1
