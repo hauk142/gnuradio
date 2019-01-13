@@ -63,10 +63,18 @@ asserts:
 
 templates:
     imports: from gnuradio import trellis
-    make: "trellis.sccc_decoder_${out_type}(\n    trellis.fsm(${o_fsm_args}), ${o_init_state},\
-        \ ${o_final_state},\n    trellis.fsm(${i_fsm_args}), ${i_init_state}, ${i_final_state},\n\
-        \    trellis.interleaver(${interleaver}),\n    ${block_size},\n    ${iterations},\n\
-        \                ${siso_type})\n  "
+    make: |-
+        trellis.sccc_decoder_${out_type}(
+                trellis.fsm(${o_fsm_args}),
+                ${o_init_state},
+                ${o_final_state},
+                trellis.fsm(${i_fsm_args}),
+                ${i_init_state},
+                ${i_final_state},
+                trellis.interleaver(${interleaver}),
+                ${block_size},
+                ${iterations},
+                ${siso_type})
 
 documentation: |-
     SCCC turbo Decoder.

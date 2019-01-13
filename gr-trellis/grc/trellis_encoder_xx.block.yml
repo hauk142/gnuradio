@@ -46,8 +46,11 @@ asserts:
 
 templates:
     imports: from gnuradio import trellis
-    make: ' trellis.encoder_${type}(trellis.fsm(${fsm_args}), ${init_state}, ${blocklength})
-        if ${blockwise} else trellis.encoder_${type}(trellis.fsm(${fsm_args}), ${init_state}) '
+    make: |-
+        % if ${blockwise}:
+        trellis.encoder_${type}(trellis.fsm(${fsm_args}), ${init_state}, ${blocklength})
+        % else:
+        trellis.encoder_${type}(trellis.fsm(${fsm_args}), ${init_state})
     callbacks:
     - set_FSM(trellis.fsm(${fsm_args}))
     - set_ST(${init_state})
