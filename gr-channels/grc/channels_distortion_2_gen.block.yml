@@ -1,5 +1,6 @@
 id: channels_distortion_2_gen
 label: Second Order Distortion
+flags: [ python ]
 
 parameters:
 -   id: beta

@@ -1,5 +1,6 @@
 id: channels_phase_bal
 label: Phase Balance
+flags: [ python ]
 
 parameters:
 -   id: alpha

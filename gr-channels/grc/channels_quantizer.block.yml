@@ -1,5 +1,6 @@
 id: channels_quantizer
 label: Quantizer
+flags: [ python ]
 
 parameters:
 -   id: bits

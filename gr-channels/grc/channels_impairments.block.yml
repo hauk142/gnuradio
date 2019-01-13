@@ -1,5 +1,6 @@
 id: channels_impairments
 label: HW Impairments
+flags: [ python ]
 
 parameters:
 -   id: phase_noise_mag

@@ -1,5 +1,6 @@
 id: channels_iqbal_gen
 label: IQ Imbalance Generator
+flags: [ python ]
 
 parameters:
 -   id: mag

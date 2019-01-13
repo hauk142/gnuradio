@@ -1,5 +1,6 @@
 id: channels_conj_fs_iqcorr
 label: Freq. Selective IQ Correction
+flags: [ python ]
 
 parameters:
 -   id: delay

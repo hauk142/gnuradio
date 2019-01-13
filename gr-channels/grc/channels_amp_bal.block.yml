@@ -1,5 +1,6 @@
 id: channels_amp_bal
 label: Amplitude Balance
+flags: [ python ]
 
 parameters:
 -   id: alpha

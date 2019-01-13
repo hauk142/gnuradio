@@ -1,5 +1,6 @@
 id: channels_phase_noise_gen
 label: Phase Noise Generator
+flags: [ python ]
 
 parameters:
 -   id: noise_mag

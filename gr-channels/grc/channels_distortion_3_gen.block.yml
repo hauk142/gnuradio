@@ -1,5 +1,6 @@
 id: channels_distortion_3_gen
 label: Third Order Distortion
+flags: [ python ]
 
 parameters:
 -   id: beta
