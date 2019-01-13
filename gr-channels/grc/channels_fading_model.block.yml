@@ -1,5 +1,6 @@
 id: channels_fading_model
 label: Fading Model
+flags: [ python, cpp ]
 
 parameters:
 -   id: N
@@ -41,6 +42,24 @@ templates:
     callbacks:
     - set_fDTs(${fDTs})
     - set_K(${K})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/channels/fading_model.h>' ]
+    declarations: 'channels::fading_model::sptr ${id};'
+    make: |-
+        this->${id} = channels::fading_model::make(
+                ${N},
+                ${fDTs},
+                ${LOS},
+                ${K},
+                ${seed});
+    link: ['gnuradio-channels']
+    callbacks:
+    - set_fDTs(${fDTs})
+    - set_K(${K})
+    translations:
+        'True': 'true'
+        'False': 'false'
 
 documentation: |-
     This algorithm implements the method described in

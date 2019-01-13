@@ -1,5 +1,6 @@
 id: channels_cfo_model
 label: CFO Model
+flags: [ python, cpp ]
 
 parameters:
 -   id: srate
@@ -35,6 +36,21 @@ templates:
                 ${stdev},
                 ${maxdev},
                 ${seed})
+    callbacks:
+    - set_std_dev(${stdev})
+    - set_max_dev(${maxdev})
+    - set_samp_rate(${srate})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/channels/cfo_model.h>' ]
+    declarations: 'channels::cfo_model::sptr ${id};'
+    make: |-
+        this->${id} = channels::cfo_model::make(
+                ${srate},
+                ${stdev},
+                ${maxdev},
+                ${seed});
+    link: ['gnuradio-channels']
     callbacks:
     - set_std_dev(${stdev})
     - set_max_dev(${maxdev})

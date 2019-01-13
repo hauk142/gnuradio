@@ -1,5 +1,6 @@
 id: channels_channel_model
 label: Channel Model
+flags: [ python, cpp ]
 
 parameters:
 -   id: noise_voltage
@@ -55,5 +56,26 @@ templates:
     - set_frequency_offset(${freq_offset})
     - set_taps(${taps})
     - set_timing_offset(${epsilon})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/channels/channel_model.h>' ]
+    declarations: 'channels::channel_model::sptr ${id};'
+    make: |-
+        this->${id} = channels::channel_model::make(
+                ${noise_voltage},
+                ${freq_offset},
+                ${epsilon},
+                {${str(taps)[1:-1]}},
+                ${seed},
+                ${block_tags});
+    link: ['gnuradio-channels']
+    callbacks:
+    - set_noise_voltage(${noise_voltage})
+    - set_frequency_offset(${freq_offset})
+    - set_taps({${str(taps)[1:-1]}})
+    - set_timing_offset(${epsilon})
+    translations:
+        'True': 'true'
+        'False': 'false'
 
 file_format: 1

@@ -1,5 +1,6 @@
 id: channels_selective_fading_model
 label: Frequency Selective Fading Model
+flags: [ python, cpp ]
 
 parameters:
 -   id: N
@@ -54,6 +55,27 @@ templates:
     callbacks:
     - set_fDTs(${fDTs})
     - set_K(${K})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/channels/selective_fading_model.h>' ]
+    declarations: 'channels::selective_fading_model::sptr ${id};'
+    make: |-
+        this->${id} = channels::selective_fading_model::make(
+                ${N},
+                ${fDTs},
+                ${LOS},
+                ${K},
+                ${seed},
+                ${delays},
+                ${mags},
+                ${ntaps});
+    link: ['gnuradio-channels']
+    callbacks:
+    - set_fDTs(${fDTs})
+    - set_K(${K})
+    translations:
+        'True': 'true'
+        'False': 'false'
 
 documentation: |-
     int d_N=8;          // number of sinusoids used to simulate gain on each ray

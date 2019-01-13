@@ -1,5 +1,6 @@
 id: channels_dynamic_channel_model
 label: Dynamic Channel Model
+flags: [ python, cpp ]
 
 parameters:
 -   id: samp_rate
@@ -98,6 +99,39 @@ templates:
     - set_noise_amp(${noise_amp})
     - set_doppler_freq(${fD})
     - set_K(${K})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/channels/dynamic_channel_model.h>' ]
+    declarations: 'channels::dynamic_channel_model::sptr ${id};'
+    make: |-
+        this->${id} = channels::dynamic_channel_model::make(
+                ${samp_rate},
+                ${sro_stdev},
+                ${sro_maxdev},
+                ${cfo_stdev},
+                ${cfo_maxdev},
+                ${N},
+                ${fD},
+                ${LOS},
+                ${K},
+                ${delays},
+                ${mags},
+                ${ntaps},
+                ${noise_amp},
+                ${seed});
+    link: ['gnuradio-channels']
+    callbacks:
+    - set_samp_rate(${samp_rate})
+    - set_sro_dev_std(${sro_stdev})
+    - set_sro_dev_max(${sro_maxdev})
+    - set_cfo_dev_std(${cfo_stdev})
+    - set_cfo_dev_max(${cfo_maxdev})
+    - set_noise_amp(${noise_amp})
+    - set_doppler_freq(${fD})
+    - set_K(${K})
+    translations:
+        'True': 'true'
+        'False': 'false'
 
 documentation: |-
     The dynamic channel model is a hier block consisting of the following effects:
