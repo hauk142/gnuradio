@@ -1,5 +1,6 @@
 id: fec_puncture_xx
 label: Puncture
+flags: [ python, cpp ]
 
 parameters:
 -   id: type
@@ -31,5 +32,11 @@ outputs:
 templates:
     imports: from gnuradio import fec
     make: fec.puncture_${type.fcn}(${puncsize}, ${puncpat}, ${delay})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/fec/puncture_${type.fcn}.h>' ]
+    declarations: 'fec::puncture_${type.fcn}::sptr ${id};'
+    make: 'this->${id} = fec::puncture_${type.fcn}::make(${puncsize}, ${puncpat}, ${delay});'
+    link: ['gnuradio-fec']
 
 file_format: 1

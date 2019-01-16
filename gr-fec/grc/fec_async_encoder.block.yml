@@ -1,5 +1,6 @@
 id: fec_async_encoder
 label: FEC Async Encoder
+flags: [ python, cpp ]
 
 parameters:
 -   id: encoder
@@ -44,6 +45,15 @@ outputs:
 templates:
     imports: from gnuradio import fec
     make: fec.async_encoder(${encoder}, ${packed}, ${rev_unpack}, ${rev_pack}, ${mtu})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/fec/async_encoder.h>' ]
+    declarations: 'fec::async_encoder::sptr ${id};'
+    make: 'this->${id} = fec::async_encoder::make(${encoder}, ${packed}, ${rev_unpack}, ${rev_pack}, ${mtu});'
+    link: ['gnuradio-fec']
+    translations:
+        'True': 'true'
+        'False': 'false'
 
 documentation: ""
 

@@ -1,5 +1,6 @@
 id: fec_encode_ccsds_27_bb
 label: Encode CCSDS 27
+flags: [ python, cpp ]
 
 inputs:
 -   domain: stream
@@ -12,5 +13,11 @@ outputs:
 templates:
     imports: from gnuradio import fec
     make: fec.encode_ccsds_27_bb()
+
+cpp_templates:
+    includes: [ '#include <gnuradio/fec/encode_ccsds_27_bb.h>' ]
+    declarations: 'fec::encode_ccsds_27_bb::sptr ${id};'
+    make: 'this->${id} = fec::encode_ccsds_27_bb::make();'
+    link: ['gnuradio-fec']
 
 file_format: 1

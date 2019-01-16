@@ -1,5 +1,6 @@
 id: fec_depuncture_bb
 label: Depuncture
+flags: [ python, cpp ]
 
 parameters:
 -   id: puncsize
@@ -29,5 +30,11 @@ outputs:
 templates:
     imports: from gnuradio import fec
     make: fec.depuncture_bb(${puncsize}, ${puncpat}, ${delay}, ${sym})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/fec/depuncture_bb.h>' ]
+    declarations: 'fec::depuncture_bb::sptr ${id};'
+    make: 'this->${id} = fec::depuncture_bb::make(${puncsize}, ${puncpat}, ${delay}, ${sym});'
+    link: ['gnuradio-fec']
 
 file_format: 1

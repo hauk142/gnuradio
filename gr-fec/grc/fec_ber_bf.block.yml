@@ -1,5 +1,6 @@
 id: fec_ber_bf
 label: BER
+flags: [ python, cpp ]
 
 parameters:
 -   id: test_mode
@@ -33,5 +34,14 @@ outputs:
 templates:
     imports: from gnuradio import fec
     make: fec.ber_bf(${test_mode}, ${berminerrors}, ${berlimit})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/fec/ber_bf.h>' ]
+    declarations: 'fec::ber_bf::sptr ${id};'
+    make: 'this->${id} = fec::ber_bf::make(${test_mode}, ${berminerrors}, ${berlimit});'
+    link: ['gnuradio-fec']
+    translations:
+        'True': 'true'
+        'False': 'false'
 
 file_format: 1
