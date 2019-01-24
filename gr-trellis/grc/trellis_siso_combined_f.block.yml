@@ -1,6 +1,7 @@
 id: trellis_siso_combined_f
 label: SISO Combo
 category: '[Core]/Trellis Coding'
+flags: [ python, cpp ]
 
 parameters:
 -   id: fsm_args
@@ -58,9 +59,18 @@ outputs:
 
 templates:
     imports: from gnuradio import trellis
-    make: trellis.siso_combined_f(trellis.fsm(${fsm_args}), ${block_size}, ${init_state},
-        ${final_state}, ${a_post_in}, ${a_post_out}, ${siso_type}, ${dim}, ${table},
-        ${metric_type})
+    make: |-
+        trellis.siso_combined_f(
+                trellis.fsm(${fsm_args}),
+                ${block_size},
+                ${init_state},
+                ${final_state},
+                ${a_post_in},
+                ${a_post_out},
+                ${siso_type},
+                ${dim},
+                ${table},
+                ${metric_type});
     callbacks:
     - set_FSM(trellis.fsm(${fsm_args}))
     - set_K(${block_size})
@@ -72,6 +82,39 @@ templates:
     - set_D(${dim})
     - set_TABLE(${table})
     - set_TYPE(${metric_type})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/trellis/siso_combined_f.h>' ]
+    declarations: 'trellis::siso_combined_f::sptr ${id};'
+    make: |-
+        std::vector<float> table = {${str(table)[1:-1]}};
+        this->${id} = trellis::siso_combined_f::make(
+                trellis::fsm(${fsm_args}),
+                ${block_size},
+                ${init_state},
+                ${final_state},
+                ${a_post_in},
+                ${a_post_out},
+                ${siso_type},
+                ${dim},
+                table,
+                ${metric_type});
+    link: ['gnuradio-trellis']
+    callbacks:
+    - set_FSM(trellis::fsm(${fsm_args}))
+    - set_K(${block_size})
+    - set_S0(${init_state})
+    - set_SK(${final_state})
+    - set_POSTI(${a_post_in})
+    - set_POSTO(${a_post_out})
+    - set_SISO_TYPE(${siso_type})
+    - set_D(${dim})
+    - set_TABLE(${table})
+    - set_TYPE(${metric_type})
+    translations:
+        'True': 'true'
+        'False': 'false'
+        'trellis.': 'trellis::'
 
 documentation: |-
     BCJR Algorithm combined with metric calculation. The fsm arguments are passed directly to the trellis.fsm() constructor.

@@ -1,6 +1,7 @@
 id: trellis_pccc_encoder_xx
 label: PCCC Encoder
 category: '[Core]/Trellis Coding'
+flags: [ python, cpp ]
 
 parameters:
 -   id: type
@@ -51,6 +52,19 @@ templates:
     make: trellis.pccc_encoder_${type}(trellis.fsm(${o_fsm_args}), ${o_init_state},
         trellis.fsm(${i_fsm_args}), ${i_init_state}, trellis.interleaver(${interleaver_args}),
         ${bl})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/trellis/pccc_encoder.h>' ]
+    declarations: 'trellis::pccc_encoder_${type}::sptr ${id};'
+    make: |-
+        this->${id} = trellis::pccc_encoder_${type}::make(
+                trellis::fsm(${o_fsm_args}),
+                ${o_init_state},
+                trellis::fsm(${i_fsm_args}),
+                ${i_init_state},
+                trellis.interleaver(${interleaver_args}),
+                ${bl});
+    link: ['gnuradio-trellis']
 
 documentation: |-
     The fsm and interleaver arguments are passed directly to the trellis.fsm() and trellis.interleaver() constructors.

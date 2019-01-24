@@ -1,6 +1,7 @@
 id: trellis_pccc_decoder_combined_xx
 label: PCCC Decoder Combo
 category: '[Core]/Trellis Coding'
+flags: [ python, cpp ]
 
 parameters:
 -   id: type
@@ -11,6 +12,7 @@ parameters:
     option_attributes:
         io: [complex, float]
         table: [complex_vector, real_vector]
+        cpp: [gr_complex, float]
     hide: part
 -   id: out_type
     label: Output Type
@@ -105,6 +107,34 @@ templates:
                 ${scaling})
     callbacks:
     - set_scaling(${scaling})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/trellis/pccc_decoder_combined_blk.h>' ]
+    declarations: 'trellis::pccc_decoder_combined_${type}${out_type}::sptr ${id};'
+    make: |-
+        std::vector<${type.cpp}> table = {${str(table)[1:-1]}};
+        this->${id} = trellis::pccc_decoder_combined_${type}${out_type}::make(
+                trellis::fsm(${o_fsm_args}),
+                ${o_init_state}, 
+                ${o_final_state},
+                trellis::fsm(${i_fsm_args}), 
+                ${i_init_state},
+                ${i_final_state},
+                trellis::interleaver(${interleaver}),
+                ${block_size},
+                ${iterations},
+                ${siso_type},
+                ${dim},
+                table,
+                ${metric_type},
+                ${scaling});
+    link: ['gnuradio-trellis']
+    callbacks:
+    - set_scaling(${scaling})
+    translations:
+        'digital.': 'digital::'
+        'trellis.': 'trellis::'
+
 
 documentation: |-
     PCCC turbo Decoder combined with metric calculation.

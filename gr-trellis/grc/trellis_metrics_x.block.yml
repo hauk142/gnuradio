@@ -1,6 +1,7 @@
 id: trellis_metrics_x
 label: Trellis Metrics
 category: '[Core]/Trellis Coding'
+flags: [ python, cpp ]
 
 parameters:
 -   id: type
@@ -11,6 +12,7 @@ parameters:
     option_attributes:
         io: [complex, float, int, short]
         table: [complex_vector, real_vector, int_vector, int_vector]
+        cpp: [gr_complex, float, int, short]
     hide: part
 -   id: card
     label: Output Cardinality
@@ -43,6 +45,21 @@ templates:
     - set_D(${dim})
     - set_TYPE(${metric_type})
     - set_TABLE(${table})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/trellis/metrics.h>' ]
+    declarations: 'trellis::metrics_${type}::sptr ${id};'
+    make: |-
+        std::vector<${type.cpp}> table = {${str(table)[1:-1]}};
+        this->${id} = trellis::metrics_${type}::make(${card}, ${dim}, table, ${metric_type});
+    link: ['gnuradio-trellis']
+    callbacks:
+    - set_O(${card})
+    - set_D(${dim})
+    - set_TYPE(${metric_type})
+    - set_TABLE(${table})
+    translations:
+        'digital.': 'digital::'
 
 documentation: |-
     Generate metrics required for Viterbi or SISO algorithms.

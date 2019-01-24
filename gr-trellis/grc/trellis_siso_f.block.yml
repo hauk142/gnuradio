@@ -1,6 +1,7 @@
 id: trellis_siso_f
 label: SISO
 category: '[Core]/Trellis Coding'
+flags: [ python, cpp ]
 
 parameters:
 -   id: fsm_args
@@ -60,6 +61,32 @@ templates:
     - set_POSTI(${a_post_in})
     - set_POSTO(${a_post_out})
     - set_SISO_TYPE(${siso_type})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/trellis/siso_f.h>' ]
+    declarations: 'trellis::siso_f::sptr ${id};'
+    make: |-
+        this->${id} = trellis::siso_f::make(trellis::fsm(
+                ${fsm_args}),
+                ${block_size},
+                ${init_state},
+                ${final_state},
+                ${a_post_in},
+                ${a_post_out},
+                ${siso_type});
+    link: ['gnuradio-trellis']
+    callbacks:
+    - set_FSM(trellis::fsm(${fsm_args}))
+    - set_K(${block_size})
+    - set_S0(${init_state})
+    - set_SK(${final_state})
+    - set_POSTI(${a_post_in})
+    - set_POSTO(${a_post_out})
+    - set_SISO_TYPE(${siso_type})
+    translations:
+        'True': 'true'
+        'False': 'false'
+        'trellis.': 'trellis::'
 
 documentation: |-
     BCJR Algorithm. The fsm arguments are passed directly to the trellis.fsm() constructor.

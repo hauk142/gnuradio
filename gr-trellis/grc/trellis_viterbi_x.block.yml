@@ -1,6 +1,7 @@
 id: trellis_viterbi_x
 label: Viterbi
 category: '[Core]/Trellis Coding'
+flags: [ python, cpp ]
 
 parameters:
 -   id: type
@@ -43,6 +44,19 @@ templates:
         ${final_state})
     callbacks:
     - set_FSM(trellis.fsm(${fsm_args}))
+    - set_K(${block_size})
+    - set_S0(${init_state})
+    - set_SK(${final_state})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/trellis/viterbi.h>' ]
+    declarations: 'trellis::viterbi_${type}::sptr ${id};'
+    make: |-
+        this->${id} = trellis::viterbi_${type}::make(trellis::fsm(${fsm_args}), ${block_size}, ${init_state},
+        ${final_state});
+    link: ['gnuradio-trellis']
+    callbacks:
+    - set_FSM(trellis::fsm(${fsm_args}))
     - set_K(${block_size})
     - set_S0(${init_state})
     - set_SK(${final_state})

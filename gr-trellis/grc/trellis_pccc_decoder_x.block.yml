@@ -1,6 +1,7 @@
 id: trellis_pccc_decoder_x
 label: PCCC Decoder
 category: '[Core]/Trellis Coding'
+flags: [ python, cpp ]
 
 parameters:
 -   id: out_type
@@ -75,6 +76,25 @@ templates:
                 ${block_size},
                 ${iterations},
                 ${siso_type})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/trellis/pccc_decoder_blk.h>' ]
+    declarations: 'trellis::pccc_decoder_${out_type}::sptr ${id};'
+    make: |-
+        this->${id} = trellis::pccc_decoder_${out_type}::make(
+                trellis::fsm(${o_fsm_args}),
+                ${o_init_state},
+                ${o_final_state},
+                trellis::fsm(${i_fsm_args}),
+                ${i_init_state},
+                ${i_final_state},
+                trellis::interleaver(${interleaver}),
+                ${block_size},
+                ${iterations},
+                ${siso_type});
+    link: ['gnuradio-trellis']
+    translations:
+        'trellis.': 'trellis::'
 
 documentation: |-
     PCCC turbo Decoder.

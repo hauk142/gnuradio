@@ -1,6 +1,7 @@
 id: trellis_encoder_xx
 label: Trellis Encoder
 category: '[Core]/Trellis Coding'
+flags: [ python, cpp ]
 
 parameters:
 -   id: type
@@ -47,14 +48,33 @@ asserts:
 templates:
     imports: from gnuradio import trellis
     make: |-
-        % if ${blockwise}:
+        % if blockwise:
         trellis.encoder_${type}(trellis.fsm(${fsm_args}), ${init_state}, ${blocklength})
         % else:
         trellis.encoder_${type}(trellis.fsm(${fsm_args}), ${init_state})
+        % endif
     callbacks:
     - set_FSM(trellis.fsm(${fsm_args}))
     - set_ST(${init_state})
     - set_K(${blocklength})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/trellis/encoder.h>' ]
+    declarations: 'trellis::encoder_${type}::sptr ${id};'
+    make: |-
+        % if blockwise:
+        this->${id} = trellis::encoder_${type}::make(trellis::fsm(${fsm_args}), ${init_state}, ${blocklength});
+        % else:
+        this->${id} = trellis::encoder_${type}::make(trellis::fsm(${fsm_args}), ${init_state});
+        % endif
+    link: ['gnuradio-trellis']
+    callbacks:
+    - set_FSM(trellis::fsm(${fsm_args}))
+    - set_ST(${init_state})
+    - set_K(${blocklength})
+    translations:
+        'True': 'true'
+        'False': 'false'
 
 documentation: |-
     The fsm arguments are passed directly to the trellis.fsm() constructor.

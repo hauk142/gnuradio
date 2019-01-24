@@ -1,6 +1,7 @@
 id: trellis_permutation
 label: Trellis Permutation
 category: '[Core]/Trellis Coding'
+flags: [ python, cpp ]
 
 parameters:
 -   id: type
@@ -10,6 +11,7 @@ parameters:
     option_attributes:
         size: [gr.sizeof_gr_complex, gr.sizeof_float, gr.sizeof_int, gr.sizeof_short,
             gr.sizeof_char]
+        cpp_size: [sizeof(gr_complex), sizeof(float), sizeof(int), sizeof(short), sizeof(char)]
     hide: part
 -   id: interleaver_size
     label: Interleaver Size
@@ -42,6 +44,18 @@ asserts:
 templates:
     imports: from gnuradio import trellis
     make: trellis.permutation(${interleaver_size}, ${table}, ${syms_per_block}, ${type.size}*${vlen})
+    callbacks:
+    - set_K(${interleaver_size})
+    - set_TABLE(${table})
+    - set_SYMS_PER_BLOCK(${syms_per_block})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/trellis/permutation.h>' ]
+    declarations: 'trellis::permutation::sptr ${id};'
+    make: |-
+        std::vector<int> table = {${str(table)[1:-1]}};
+        this->${id} = trellis::permutation::make(${interleaver_size}, table, ${syms_per_block}, ${type.cpp_size}*${vlen});
+    link: ['gnuradio-trellis']
     callbacks:
     - set_K(${interleaver_size})
     - set_TABLE(${table})
