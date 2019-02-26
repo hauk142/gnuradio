@@ -1,6 +1,6 @@
 id: variable_qtgui_push_button
 label: QT GUI Push Button
-flags: [ python ]
+flags: [ python, cpp ]
 
 parameters:
 -   id: label
@@ -49,6 +49,29 @@ templates:
         ${win}.pressed.connect(lambda: self.set_${id}(self._${id}_choices['Pressed']))
         ${win}.released.connect(lambda: self.set_${id}(self._${id}_choices['Released']))
         ${gui_hint() % win}
+
+cpp_templates:
+    includes: ['#include <QPushButton>', '#include <QApplication>']
+    link: ['gnuradio-qtgui', 'Qt5::Widgets']
+    var_make: ${id} = ${value};
+    callbacks:
+    - set_${id}(${value})
+    declarations: |-
+        <%
+            win = '_%s_push_button'%id
+        %>\
+        QPushButton *${win};
+        ${type} _${id}_choices[2] = { ${pressed}, ${released} };
+    make: |-
+        <%
+            win = '_%s_push_button'%id
+        %>\
+        this->${win} = new QPushButton("${(label.strip("'") if (len(label) - 2 > 0) else repr(id).strip("'"))}");
+
+        QObject::connect(this->${win}, &QPushButton::pressed, this, [this] () {this->set_${id}(this->_${id}_choices[0]);});
+        QObject::connect(this->${win}, &QPushButton::released, this, [this] () {this->set_${id}(this->_${id}_choices[1]);});
+
+        this->${(gui_hint() % win).replace(".", "->")[6:]};
 
 documentation: |-
     This block creates a variable push button. Leave the label blank to use the variable id as the label.
