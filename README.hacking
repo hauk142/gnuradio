@@ -112,7 +112,7 @@ you and later maintainers identify corner cases, regressions and other malfuncti
 of code.
 
 GNU Radio has integrated versatile, easy to use testing facilities. Please refer to
-http://gnuradio.org/redmine/projects/gnuradio/wiki/Coding_guide_impl#Unit-testing
+http://gnuradio.org/redmine/projects/gnuradio/wiki/Coding_guide_impl#Unit_testing
 
 
 * Standard command line options
