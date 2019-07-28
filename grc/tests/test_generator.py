@@ -20,6 +20,7 @@
 from os import path
 import tempfile
 
+from gnuradio import gr
 from grc.core.platform import Platform
 
 
@@ -31,7 +32,7 @@ def test_generator():
 
     platform = Platform(
         name='GNU Radio Companion Compiler',
-        prefs=None,
+        prefs=gr.prefs(),
         version='0.0.0',
     )
     platform.build_library()
