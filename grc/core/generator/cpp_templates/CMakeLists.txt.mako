@@ -17,18 +17,20 @@ class_name = flow_graph.get_option('id')
 
 cmake_minimum_required(VERSION 3.8)
 
+project(${class_name})
+
+find_package(Gnuradio "3.9" REQUIRED COMPONENTS
+    blocks
+    % for link in links:
+    % if link:
+    ${link.replace("gnuradio-", "")}
+    % endif
+    % endfor
+)
+
 % if generate_options == 'qt_gui':
 find_package(Qt5Widgets REQUIRED)
 % endif
-
-include_directories(
-    ${'$'}{GNURADIO_ALL_INCLUDE_DIRS}
-    ${'$'}{Boost_INCLUDE_DIRS}
-    % if generate_options == 'qt_gui':
-    ${'$'}{Qt5Widgets_INCLUDES}
-    % endif
-    $ENV{HOME}/.grc_gnuradio
-)
 
 % if generate_options == 'qt_gui':
 add_definitions(${'$'}{Qt5Widgets_DEFINITIONS})
@@ -48,21 +50,13 @@ set(CMAKE_EXE_LINKER_FLAGS " -static")
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 % endif
 
-set(GR_LIBRARIES
-    boost_system
-    % if parameters:
-    boost_program_options
-    % endif
-    gnuradio-blocks
-    gnuradio-runtime
-    gnuradio-pmt
-    log4cpp
+add_executable(${class_name} ${class_name}.cpp)
+target_link_libraries(${class_name}
+    gnuradio::gnuradio-blocks
     % for link in links:
     % if link:
-    ${link}
+    gnuradio::${link}
     % endif
     % endfor
 )
 
-add_executable(${class_name} ${class_name}.cpp)
-target_link_libraries(${class_name} ${'$'}{GR_LIBRARIES})
