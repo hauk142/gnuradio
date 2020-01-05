@@ -84,6 +84,6 @@ def main():
     application.show()
     log.debug("Running")
     sys.exit(app.exec_()) # pyqt's blocking function
-    
+
 if __name__ == "__main__":
     main()

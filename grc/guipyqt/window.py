@@ -81,7 +81,7 @@ class BlockModel(QStandardItemModel):
         return data
 
     def itemData(self, x):
-        print(x)
+        return {0: x.data()}
 
     def dropMimeData(self, data, action, row, column, parent):
         print(row, column)
@@ -92,7 +92,13 @@ class BlockModel(QStandardItemModel):
 
             # Assuming that we get at least one item, and that it defines text that we can display.
             text = data_items[0][Qt.DisplayRole]
+            print(text.value())
 
+            return True
+        else:
+            return QStandardItemModel.dropMimeData(self, data, action, row, column, parent)
+
+'''
             for row in range(self.rowCount()):
                 name = self.item(row, 0).text()
 
@@ -106,15 +112,12 @@ class BlockModel(QStandardItemModel):
                     print(number)
                     number_item.setText(str(number + 1))
                     break
-
                 #else:
                 #    name_item = QStandardItem(text)
                 #    number_item = QStandardItem("1")
                 #    self.appendRow([name_item, number_item])
+'''
 
-            return True
-        else:
-            return QStandardItemModel.dropMimeData(self, data, action, row, column, parent)
 
 class MyWindow(QMainWindow):
     def __init__(self, platform):
