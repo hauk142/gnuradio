@@ -125,7 +125,50 @@ class MyWindow(QMainWindow):
         
         # Set up layout
         gridLayout = QGridLayout(centralWidget)
-        centralWidget.setLayout(gridLayout)        
+        centralWidget.setLayout(gridLayout)
+
+        # Set up menu bar
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('&File')
+        editMenu = menubar.addMenu('&Edit')
+        viewMenu = menubar.addMenu('&View')
+        runMenu = menubar.addMenu('&Run')
+        toolsMenu = menubar.addMenu('&Tools')
+        helpMenu = menubar.addMenu('&Help')
+
+        # Set up toolbar
+        # Is the following line really necessary?
+        QIcon.setThemeName("default")
+        newAct = QAction(QIcon.fromTheme('document-new'), 'New', self)
+        toolbar = self.addToolBar('New')
+        toolbar.addAction(newAct)
+        openAct = QAction(QIcon.fromTheme('document-open'), 'Open', self)
+        toolbar = self.addToolBar('Open')
+        toolbar.addAction(openAct)
+        saveAct = QAction(QIcon.fromTheme('document-save'), 'Save', self)
+        toolbar = self.addToolBar('Save')
+        toolbar.addAction(saveAct)
+        closeAct = QAction(QIcon.fromTheme('call-stop'), 'Close', self)
+        toolbar = self.addToolBar('Close')
+        toolbar.addAction(closeAct)
+        printAct = QAction(QIcon.fromTheme('document-print'), 'Print', self)
+        toolbar = self.addToolBar('Print')
+        toolbar.addAction(printAct)
+        cutAct = QAction(QIcon.fromTheme('edit-cut'), 'Cut', self)
+        toolbar = self.addToolBar('Cut')
+        toolbar.addAction(cutAct)
+        copyAct = QAction(QIcon.fromTheme('edit-copy'), 'Copy', self)
+        toolbar = self.addToolBar('Copy')
+        toolbar.addAction(copyAct)
+        pasteAct = QAction(QIcon.fromTheme('edit-paste'), 'Paste', self)
+        toolbar = self.addToolBar('Paste')
+        toolbar.addAction(pasteAct)
+        undoAct = QAction(QIcon.fromTheme('edit-undo'), 'Undo', self)
+        toolbar = self.addToolBar('Undo')
+        toolbar.addAction(undoAct)
+        redoAct = QAction(QIcon.fromTheme('edit-redo'), 'Redo', self)
+        toolbar = self.addToolBar('Redo')
+        toolbar.addAction(redoAct)
         
         # Create QStandardItemModel to represent blocks that will show up in the TreeView
         block_model = QStandardItemModel()
