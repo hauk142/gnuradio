@@ -15,7 +15,8 @@ class Block(QGraphicsItem):
         self.x = x
         self.y = y
         self.label = label
-                
+        self.setFlag(QGraphicsItem.ItemIsMovable)
+        
     def paint(self, painter, option, widget):
         # Draw rectangle
         painter.setPen(QPen(Qt.black,  1, Qt.SolidLine)) # line color
@@ -31,8 +32,11 @@ class Block(QGraphicsItem):
         painter.drawText(QRectF(self.x, self.y - 60, 150, 150), Qt.AlignCenter, self.label)  # NOTE the 3rd/4th arg in  QRectF seems to set the bounding box of the text, so if there is ever any clipping, thats why
 
     def boundingRect(self): # required to have
-        return QRectF(0, 0, *WINDOW_SIZE) # same as the QGraphicsScene its inside
+        return QRectF(self.x, self.y, 150, 150) # same as the rectangle we draw
 
+    def mouseReleaseEvent(self, e):
+        super(Block, self).mouseReleaseEvent(e)
+        
 
 # Main Canvas
 class MyQGraphicsScene(QGraphicsScene):
@@ -85,7 +89,7 @@ class MyQGraphicsScene(QGraphicsScene):
                     if block.label == label_text:
                         break
                 print("Creating", block.key)
-
+            
                 # Add block of this key at the cursor position
                 cursor_pos = event.scenePos()
                 new_block = Block(cursor_pos.x(), cursor_pos.y(), label_text)
