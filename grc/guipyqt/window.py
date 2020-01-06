@@ -10,28 +10,12 @@ class MyQTreeView(QTreeView):
     def __init__(self):
         QTreeView.__init__(self)
 
-    def dragEnterEvent(self, event):
-        print(event.QueryWhatsThis)
-        print(event.DragEnter)
-        print(event.WhatsThis)
-        print(event.WhatsThisClicked)
-
-        if event.mimeData().hasUrls:
-            event.accept()
-        else:
-            event.ignore()
-        print("dragEnterEvent")
-
-
-
     def dragMoveEvent(self, event):
-        print("dragMoveEvent")
         if event.mimeData().hasUrls:
             event.setDropAction(QtCore.Qt.CopyAction)
             event.accept()
         else:
             event.ignore()
-
 
     def dropEvent(self, event):
         QTreeView.dropEvent(self, event)
@@ -47,47 +31,32 @@ class MyQTreeView(QTreeView):
             event.ignore()
 
 
-
-
-
-
-
 class BlockModel(QStandardItemModel):
     def __init__(self):
         QStandardItemModel.__init__(self)
 
     def decode_data(self, bytearray):
-
         data = []
         item = {}
-
         ds = QDataStream(bytearray)
         while not ds.atEnd():
-
             row = ds.readInt32()
             column = ds.readInt32()
-
             map_items = ds.readInt32()
             for i in range(map_items):
-
                 key = ds.readInt32()
-
                 value = QVariant()
                 ds >> value
                 item[Qt.ItemDataRole(key)] = value
-
             data.append(item)
-
         return data
 
     def itemData(self, x):
         return {0: x.data()}
 
     def dropMimeData(self, data, action, row, column, parent):
-        print(row, column)
         if data.hasFormat('application/x-qabstractitemmodeldatalist'):
             bytearray = data.data('application/x-qabstractitemmodeldatalist')
-
             data_items = self.decode_data(bytearray)
 
             # Assuming that we get at least one item, and that it defines text that we can display.
@@ -97,26 +66,6 @@ class BlockModel(QStandardItemModel):
             return True
         else:
             return QStandardItemModel.dropMimeData(self, data, action, row, column, parent)
-
-'''
-            for row in range(self.rowCount()):
-                name = self.item(row, 0).text()
-
-                print(name)
-
-
-                if name == text:
-                    number_item = self.item(row, 1)
-                    print(number_item)
-                    number = int(number_item.text())
-                    print(number)
-                    number_item.setText(str(number + 1))
-                    break
-                #else:
-                #    name_item = QStandardItem(text)
-                #    number_item = QStandardItem("1")
-                #    self.appendRow([name_item, number_item])
-'''
 
 
 class MyWindow(QMainWindow):
@@ -140,12 +89,10 @@ class MyWindow(QMainWindow):
         self.tree.setHeaderHidden(True)
         self.tree.setDragEnabled(True) # needed to be able to click and hold on one of the rows
         self.tree.setDragDropMode(QAbstractItemView.DragDrop) # definitely needed, options are NoDragDrop, DragOnly, DropOnly, DragDrop, InternalMove
-        #self.tree.setEnabled(True)
 
         gridLayout = QGridLayout(centralWidget)
         centralWidget.setLayout(gridLayout)
         gridLayout.addWidget(self.tree, 0, 0)
-
 
         # Create tree/dict structure out of list of blocks. Takes ~1 ms on Marc's machine
         block_tree = {}
@@ -178,13 +125,8 @@ class MyWindow(QMainWindow):
                 else:
                     print("ERROR, SHOULD NOT HAVE THIS MANY CATEGORIES!")
 
-
         # Populate TreeView using recursive method. Takes ~1.5 ms on Marc's machine
         self._populateTree(block_tree, block_model.invisibleRootItem())
-
-
-
-
 
     # Recursive method of populating the tree
     def _populateTree(self, children, parent):
@@ -193,7 +135,6 @@ class MyWindow(QMainWindow):
             child_item.setEditable(False)
             child_item.setDragEnabled(True)
             child_item.setDropEnabled(True)
-            #child_item.setEnabled(True)
             parent.appendRow(child_item)
             if bool(children): # if dict is not empty it will return True
                 self._populateTree(children[child], child_item)
