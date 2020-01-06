@@ -8,35 +8,43 @@ import time
 WINDOW_SIZE = 840, 600
 BLOCK_ENABLED_COLOR = '#F1ECFF'
 
-
 class Block(QGraphicsItem):
     def __init__(self, x, y, label):
         QGraphicsItem.__init__(self)
         self.x = x
         self.y = y
+        self.current_width = 300 # default shouldnt matter, it will change immedaitely after the first paint
         self.label = label
         self.setFlag(QGraphicsItem.ItemIsMovable)
         
     def paint(self, painter, option, widget):
-        # Draw rectangle
-        painter.setPen(QPen(Qt.black,  1, Qt.SolidLine)) # line color
-        painter.setBrush(QColor(BLOCK_ENABLED_COLOR)) # solid color        
-        painter.drawRect(self.x, self.y, 150, 150)
-        # KEEP IN MIND WE WILL STILL HAVE TO STRETCH THE RECTANGLE SO IT FITS ALL THE PARAMS AND STUFF
-        
-        # Draw block label text
+        # Set font
         font = QFont('Helvetica', 10)
         #font.setStretch(70) # makes it more condensed
         font.setBold(True)
+        
+        # Figure out width of font so we can adjust rectangle width
+        fm = QFontMetrics(font)
+        self.current_width = fm.width(self.label) + 10 # adds some margin
+        
+        # Draw rectangle
+        painter.setPen(QPen(Qt.black,  1, Qt.SolidLine)) # line color
+        painter.setBrush(QColor(BLOCK_ENABLED_COLOR)) # solid color        
+        painter.drawRect(self.x, self.y, self.current_width, 150)
+        
+        # Draw block label text
         painter.setFont(font)
-        painter.drawText(QRectF(self.x, self.y - 60, 150, 150), Qt.AlignCenter, self.label)  # NOTE the 3rd/4th arg in  QRectF seems to set the bounding box of the text, so if there is ever any clipping, thats why
-
+        painter.drawText(QRectF(self.x, self.y - 60, self.current_width, 150), Qt.AlignCenter, self.label)  # NOTE the 3rd/4th arg in  QRectF seems to set the bounding box of the text, so if there is ever any clipping, thats why
+   
     def boundingRect(self): # required to have
-        return QRectF(self.x, self.y, 150, 150) # same as the rectangle we draw
+        return QRectF(self.x, self.y, self.current_width, 150) # same as the rectangle we draw
 
     def mouseReleaseEvent(self, e):
         super(Block, self).mouseReleaseEvent(e)
-        
+
+    def mouseDoubleClickEvent(self, e):
+        print("DETECTED DOUBLE CLICK!")
+        super(Block, self).mouseDoubleClickEvent(e)      
 
 # Main Canvas
 class MyQGraphicsScene(QGraphicsScene):
