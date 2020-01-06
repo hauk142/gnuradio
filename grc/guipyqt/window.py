@@ -1,12 +1,38 @@
 import sys
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QTreeView, QAbstractItemView, QGraphicsView, QGraphicsScene
-from PyQt5.QtCore import QSize, QDataStream, QVariant, Qt, QRectF
-from PyQt5.QtGui import QStandardItem, QStandardItemModel
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 import six
 import time
 
 WINDOW_SIZE = 840, 600
+BLOCK_ENABLED_COLOR = '#F1ECFF'
+
+
+class Block(QGraphicsItem):
+    def __init__(self, x, y, label):
+        QGraphicsItem.__init__(self)
+        self.x = x
+        self.y = y
+        self.label = label
+                
+    def paint(self, painter, option, widget):
+        # Draw rectangle
+        painter.setPen(QPen(Qt.black,  1, Qt.SolidLine)) # line color
+        painter.setBrush(QColor(BLOCK_ENABLED_COLOR)) # solid color        
+        painter.drawRect(self.x, self.y, 150, 150)
+        # KEEP IN MIND WE WILL STILL HAVE TO STRETCH THE RECTANGLE SO IT FITS ALL THE PARAMS AND STUFF
+        
+        # Draw block label text
+        font = QFont('Helvetica', 10)
+        #font.setStretch(70) # makes it more condensed
+        font.setBold(True)
+        painter.setFont(font)
+        painter.drawText(QRectF(self.x, self.y - 60, 150, 150), Qt.AlignCenter, self.label)  # NOTE the 3rd/4th arg in  QRectF seems to set the bounding box of the text, so if there is ever any clipping, thats why
+
+    def boundingRect(self): # required to have
+        return QRectF(0, 0, *WINDOW_SIZE) # same as the QGraphicsScene its inside
+
 
 # Main Canvas
 class MyQGraphicsScene(QGraphicsScene):
@@ -16,14 +42,14 @@ class MyQGraphicsScene(QGraphicsScene):
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls:
-            event.setDropAction(QtCore.Qt.CopyAction)
+            event.setDropAction(Qt.CopyAction)
             event.accept()
         else:
             event.ignore()    
 
     def dragMoveEvent(self, event):
         if event.mimeData().hasUrls:
-            event.setDropAction(QtCore.Qt.CopyAction)
+            event.setDropAction(Qt.CopyAction)
             event.accept()
         else:
             event.ignore()
@@ -58,10 +84,14 @@ class MyQGraphicsScene(QGraphicsScene):
                 for block in six.itervalues(self.platform.blocks):
                     if block.label == label_text:
                         break
-                print(block.key)
+                print("Creating", block.key)
+
+                # Add block of this key at the cursor position
+                cursor_pos = event.scenePos()
+                new_block = Block(cursor_pos.x(), cursor_pos.y(), label_text)
+                self.addItem(new_block)
                 
-                
-                event.setDropAction(QtCore.Qt.CopyAction)
+                event.setDropAction(Qt.CopyAction)
                 event.accept()
             else:
                 return QStandardItemModel.dropMimeData(self, data, action, row, column, parent)
