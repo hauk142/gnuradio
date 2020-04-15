@@ -84,11 +84,11 @@ templates:
     - set_output_index(${output_index})
 
 cpp_templates:
-    includes: ['#include <gnuradio/blocks/copy.h>']
+    includes: ['#include <gnuradio/blocks/selector.h>']
     declarations: 'blocks::selector::sptr ${id};'
     make: |-
-        this->${id} = blocks::selector::make(${type.size}*${vlen},${input_index},${output_index});
-        self->${id}.set_enabled(${enabled});
+        this->${id} = blocks::selector::make(${type.size}*${vlen}, ${input_index}, ${output_index});
+        this->${id}->set_enabled(${enabled});
     callbacks:
     - set_enabled(${enabled})
     - set_input_index(${input_index})
