@@ -1,14 +1,18 @@
 id: vocoder_freedv_rx_ss
 label: FreeDV demodulator
+flags: [ python, cpp ]
 
 parameters:
 -   id: mode
     label: Operating Mode
-    dtype: int
+    dtype: enum
     default: freedv_api.MODE_1600
     options: [freedv_api.MODE_1600, freedv_api.MODE_700, freedv_api.MODE_700B, freedv_api.MODE_2400A,
         freedv_api.MODE_2400B, freedv_api.MODE_800XA, freedv_api.MODE_700C, freedv_api.MODE_700D]
     option_labels: ['1600', '700', 700B, 2400A, 2400B, 800XA, 700C, 700D]
+    option_attributes:
+        cpp_options: [vocoder::freedv_api::MODE_1600, vocoder::freedv_api::MODE_700, vocoder::freedv_api::MODE_700B, vocoder::freedv_api::MODE_2400A,
+            vocoder::freedv_api::MODE_2400B, vocoder::freedv_api::MODE_800XA, vocoder::freedv_api::MODE_700C, vocoder::freedv_api::MODE_700D]
 -   id: squelch_thresh
     label: Squelch Threshold
     dtype: float
@@ -37,6 +41,14 @@ templates:
     make: vocoder.freedv_rx_ss(${mode},${squelch_thresh},${interleave_frames})
     callbacks:
     - set_squelch_en(${squelch_enable})
+    - set_squelch_thresh(${squelch_thresh})
+
+cpp_templates:
+    includes: [ '#include <gnuradio/vocoder/freedv_rx_ss.h>' ]
+    declarations: 'vocoder::freedv_rx_ss::sptr ${id};'
+    make: 'this->${id} = vocoder::freedv_rx_ss::make(${mode.cpp_options}, ${squelch_thresh}, ${interleave_frames});'
+    link: ['gnuradio-vocoder']
+    callbacks:
     - set_squelch_thresh(${squelch_thresh})
 
 documentation: |-
