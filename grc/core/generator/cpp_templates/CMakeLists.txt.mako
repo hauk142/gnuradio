@@ -19,7 +19,7 @@ cmake_minimum_required(VERSION 3.8)
 
 project(${class_name})
 
-find_package(Gnuradio "3.9" REQUIRED COMPONENTS
+find_package(Gnuradio "3.8" REQUIRED COMPONENTS
     blocks
     % for link in links:
     % if link:
