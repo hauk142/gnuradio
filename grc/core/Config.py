@@ -22,12 +22,14 @@ import os
 from os.path import expanduser, normpath, expandvars, exists
 
 from . import Constants
+from .Components import COMPONENTS
 
 
 class Config(object):
     name = 'GNU Radio Companion (no gui)'
     license = __doc__.strip()
     website = 'https://www.gnuradio.org/'
+    components = COMPONENTS
 
     hier_block_lib_dir = os.environ.get('GRC_HIER_PATH', Constants.DEFAULT_HIER_BLOCK_LIB_DIR)
 

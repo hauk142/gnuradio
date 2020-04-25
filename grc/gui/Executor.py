@@ -94,7 +94,7 @@ class ExecFlowGraphThread(threading.Thread):
 
         xterm_executable = find_executable(self.xterm_executable)
 
-        run_command_args = ['cmake .. &&', 'make && ', xterm_executable, '-e', run_command]
+        run_command_args = ['cmake .. -Wno-dev &&', 'make && ', xterm_executable, '-e', run_command]
         Messages.send_start_exec(' '.join(run_command_args))
 
         return subprocess.Popen(

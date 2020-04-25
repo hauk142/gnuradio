@@ -8,22 +8,26 @@
 % if flow_graph.get_option('description'):
 # Description: ${flow_graph.get_option('description')}
 % endif
-# GNU Radio version: ${version}
+# GNU Radio version: ${config.version}
 #####################
 
 <%
 class_name = flow_graph.get_option('id')
+version_list = config.version.split(".")
+short_version = '.'.join(version_list[0:2])
 %>\
 
 cmake_minimum_required(VERSION 3.8)
 
 project(${class_name})
 
-find_package(Gnuradio "3.8" REQUIRED COMPONENTS
-    blocks
-    % for link in links:
-    % if link:
-    ${link.replace("gnuradio-", "")}
+
+find_package(Gnuradio "${short_version}" COMPONENTS
+    % for component in config.components.split(";"):
+    % if component.startswith("gr-"):
+    % if not component in ['gr-utils', 'gr-ctrlport']:
+    ${component.replace("gr-", "")}
+    % endif
     % endif
     % endfor
 )
@@ -55,8 +59,9 @@ target_link_libraries(${class_name}
     gnuradio::gnuradio-blocks
     % for link in links:
     % if link:
-    gnuradio::${link}
+    ${link.replace("gnuradio-", "gnuradio::gnuradio-")}
     % endif
     % endfor
+
 )
 
