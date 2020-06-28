@@ -109,7 +109,7 @@ def run_qt(args, log):
     from .gui_qt import properties
 
     # Delay importing until the logging is setup
-    from .core.platform import Platform
+    from .gui_qt.Platform import Platform
 
     ''' Global Settings/Constants '''
     # Initialize a class with all of the default settings and properties
@@ -179,7 +179,7 @@ def run_qt(args, log):
         version=gr.version(),
         version_parts=(gr.major_version(), gr.api_version(), gr.minor_version()),
         prefs=gr.prefs(),
-        #install_prefix=gr.prefix()
+        install_prefix=gr.prefix()
     )
     model.build_library()
 

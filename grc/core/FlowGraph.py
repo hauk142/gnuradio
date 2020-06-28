@@ -215,7 +215,7 @@ class FlowGraph(Element):
         elements.extend(self.connections)
         return elements
 
-    def children(self):
+    def child_elements(self):
         return itertools.chain(self.iter_enabled_blocks(), self.connections)
 
     def rewrite(self):
@@ -333,7 +333,7 @@ class FlowGraph(Element):
 
         return connection
 
-    def disconnect(self, *ports):
+    def disconnect_ports(self, *ports):
         to_be_removed = [con for con in self.connections
                          if any(port in con for port in ports)]
         for con in to_be_removed:
