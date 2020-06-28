@@ -110,7 +110,7 @@ def run_qt(args, log):
     from .gui_qt import properties
 
     # Delay importing until the logging is setup
-    from .core.platform import Platform
+    from .gui_qt.Platform import Platform
 
     ''' Global Settings/Constants '''
     # Initialize a class with all of the default settings and properties

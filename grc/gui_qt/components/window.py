@@ -491,6 +491,7 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
 
     def exit_triggered(self):
         log.debug('exit')
+        self.app.exit()
 
     def help_triggered(self):
         log.debug('help')
