@@ -48,6 +48,7 @@ class Application(QtWidgets.QApplication):
 
         log.debug("Creating QApplication instance")
         QtWidgets.QApplication.__init__(self, settings.argv)
+        self.setStyle("Fusion")
 
         # Save references to the global settings and gnuradio platform
         self.settings = settings
