@@ -143,7 +143,7 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
         
         # figure out width of block based on widest line of text
         fm = QtGui.QFontMetrics(QtGui.QFont('Helvetica', 10))
-        largest_width = fm.width(self.block_label)/1.5
+        largest_width = fm.width(self.label)/1.5
         for key, item in self.params.items():
             value = item.value
             if value is not None:
@@ -188,7 +188,7 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
 
         # Draw block label text
         painter.setFont(font)
-        painter.drawText(QtCore.QRectF(x, y - self.height/2 + 10, self.width, self.height), Qt.AlignCenter, self.name)  # NOTE the 3rd/4th arg in  QRectF seems to set the bounding box of the text, so if there is ever any clipping, thats why
+        painter.drawText(QtCore.QRectF(x, y - self.height/2 + 10, self.width, self.height), Qt.AlignCenter, self.label)  # NOTE the 3rd/4th arg in  QRectF seems to set the bounding box of the text, so if there is ever any clipping, thats why
         
         # Draw param text
         y_offset = 30 # params start 30 down from the top of the box
