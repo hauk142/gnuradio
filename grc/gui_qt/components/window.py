@@ -129,9 +129,18 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
 
         log.debug("Loading flowgraph model")
         test_flowgraph = os.path.join(self.settings.path.INSTALL, 'gui_qt/resources/data/rx_logo.grc')
-        self.flowgraph = Flowgraph(self, test_flowgraph)
+        #self.flowgraph = Flowgraph(self, test_flowgraph)
         log.debug("Adding flowgraph view")
-        self.new_tab(self.flowgraph)
+        
+        self.tabs = QtWidgets.QTabWidget()
+        self.tab1 = Flowgraph(self, test_flowgraph)
+        self.tab2 = Flowgraph(self, test_flowgraph)
+
+        self.tabs.addTab(self.tab1,"Tab 1")
+        self.tabs.addTab(self.tab2,"Tab 2")
+        self.setCentralWidget(self.tabs)
+        
+        #self.new_tab(self.flowgraph)
 
     '''def show(self):
         log.debug("Showing main window")
@@ -402,6 +411,8 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
     # Action Handlers
     def new_triggered(self):
         log.debug('new file')
+        self.tabs.addTab(Flowgraph(self), "Tab 3")
+        
 
     def open_triggered(self):
         log.debug('open')
@@ -409,7 +420,7 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
 
         if filename:
             log.info("Opening flowgraph ({0})".format(filename))
-            self.flowgraph = views.Flowgraph(self, filename)
+            self.flowgraph = Flowgraph(self, filename)
             self.new_tab(self.flowgraph)
 
     def save_triggered(self):
@@ -420,6 +431,8 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
 
     def close_triggered(self):
         log.debug('close')
+        curr = self.tabs.currentIndex()
+        self.tabs.removeTab(curr)
 
     def close_all_triggered(self):
         log.debug('close')
