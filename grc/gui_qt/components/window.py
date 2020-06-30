@@ -59,6 +59,7 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
 
         # Setup the window icon
         icon = QtGui.QIcon(self.settings.path.ICON)
+        QtGui.QIcon.setThemeName("default")
         log.debug("Setting window icon - ({0})".format(self.settings.path.ICON))
         self.setWindowIcon(icon)
 
