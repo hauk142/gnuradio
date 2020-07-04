@@ -336,7 +336,13 @@ class Flowgraph(QtWidgets.QGraphicsView, base.Component): # added base.Component
             super(Flowgraph, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
-        self.rubberBand.hide()
+        if self.rubberBand.isVisible():
+            self.rubberBand.hide()
+            rect = self.rubberBand.geometry()
+            rect = self.mapToScene(rect).boundingRect()
+            selected = self.scene.items(rect)
+            for block in selected:
+                block.setSelected(True)
         if event.button() == Qt.LeftButton:
             if event.modifiers() & Qt.ControlModifier:
                 self.setCursor(Qt.OpenHandCursor)
