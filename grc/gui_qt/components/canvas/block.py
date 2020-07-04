@@ -130,19 +130,22 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
         #self.block_label = block_label
         self.block_label = self.key
 
+
+        # TODO: Find height based on ports
+
         # figure out height of block based on how many params there are
         i = 30
         
         for key, item in self.params.items():
             value = item.value
-            if value is not None and item.hide == 'none':
+            if value is not None and item.hide not in ('all','part'):
                 i+= 20
         
         self.height = i
 
         
         # figure out width of block based on widest line of text
-        fm = QtGui.QFontMetrics(QtGui.QFont('Helvetica', 10))
+        fm = QtGui.QFontMetrics(QtGui.QFont('Helvetica Bold', 10))
         largest_width = fm.width(self.label)/1.5
         for key, item in self.params.items():
             value = item.value
@@ -194,7 +197,7 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
         y_offset = 30 # params start 30 down from the top of the box
         for key, item in self.params.items():
             value = item.value
-            if value is not None and item.hide == 'none':
+            if value is not None and item.hide not in ('all','part'):
                 if len(value) > LONG_VALUE:
                     value = value[:LONG_VALUE-3] + '...'
                 font.setBold(True)
