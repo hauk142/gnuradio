@@ -376,6 +376,12 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
         filename, filtr = Open(self, self.actions['open'].statusTip(),
                                filter='Flow Graph Files (*.grc);;All files (*.*)')
         return filename
+    
+    def save(self):
+        Save = QtWidgets.QFileDialog.getSaveFileName
+        filename, filtr = Save(self, self.actions['save'].statusTip(),
+                            filter='Flow Graph Files (*.grc);;All files (*.*)')
+        return filename
 
     # Overridden methods
     def addDockWidget(self, location, widget):
@@ -412,7 +418,7 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
     def new_triggered(self):
         log.debug('new file')
         self.tabs.addTab(Flowgraph(self), "Tab 3")
-        
+        self.tabs.setCurrentIndex(self.tabs.count() - 1)
 
     def open_triggered(self):
         log.debug('open')
@@ -428,6 +434,10 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
 
     def save_as_triggered(self):
         log.debug('save')
+        filename = self.save()
+
+        if filename:
+            log.info(f"Saving flowgraph ({filename})")
 
     def close_triggered(self):
         log.debug('close')
@@ -436,6 +446,8 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
 
     def close_all_triggered(self):
         log.debug('close')
+        while self.tabs.count() > 0:
+            self.tabs.removeTab(0)
 
     def print_triggered(self):
         log.debug('print')
@@ -479,7 +491,7 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
 
     def about_qt_triggered(self):
         log.debug('about_qt')
-        self.aboutQt()
+        self.app.aboutQt()
 
     def properties_triggered(self):
         log.debug('properties')
