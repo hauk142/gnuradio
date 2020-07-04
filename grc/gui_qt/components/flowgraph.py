@@ -53,6 +53,7 @@ class FlowgraphScene(QtWidgets.QGraphicsScene, base.Component, CoreFlowgraph):
         CoreFlowgraph.__init__(self, self.platform)
         self.isPanning    = False
         self.mousePressed = False
+        self.addItem(self.options_block)
         
 
     def dragEnterEvent(self, event):

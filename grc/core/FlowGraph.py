@@ -38,6 +38,8 @@ class FlowGraph(Element):
         """
         Element.__init__(self, parent)
         self.options_block = self.parent_platform.make_block(self, 'options')
+        self.options_block.params['id'].set_value('options')
+        self.options_block.coordinate = (300,300)
 
         self.blocks = [self.options_block]
         self.connections = set()
