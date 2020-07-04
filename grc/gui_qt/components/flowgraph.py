@@ -224,6 +224,8 @@ class Flowgraph(QtWidgets.QGraphicsView, base.Component): # added base.Component
 
         self.isPanning    = False
         self.mousePressed = False
+        self.rubberBand = QtWidgets.QRubberBand(QtWidgets.QRubberBand.Rectangle, self)
+        
 
         '''
         QGraphicsView.__init__(self, flow_graph, parent)
@@ -306,6 +308,11 @@ class Flowgraph(QtWidgets.QGraphicsView, base.Component): # added base.Component
     def mousePressEvent(self,  event):
         if event.button() == Qt.LeftButton:
             self.mousePressed = True
+            self.origin = event.pos()
+            if not self.scene.itemAt(self.mapToScene(event.pos()), QtGui.QTransform()):
+                self.rubberBand.setGeometry(QtCore.QRect(self.origin, QtCore.QSize()))
+                self.rubberBand.show()
+            
             if self.isPanning:
                 self.setCursor(Qt.ClosedHandCursor)
                 self.dragPos = event.pos()
@@ -315,6 +322,8 @@ class Flowgraph(QtWidgets.QGraphicsView, base.Component): # added base.Component
                 super(Flowgraph, self).mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
+        if self.rubberBand.isVisible():
+            self.rubberBand.setGeometry(QtCore.QRect(self.origin, event.pos()).normalized())
         if self.mousePressed and self.isPanning:
             newPos = event.pos()
             diff = newPos - self.dragPos
@@ -327,6 +336,7 @@ class Flowgraph(QtWidgets.QGraphicsView, base.Component): # added base.Component
             super(Flowgraph, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
+        self.rubberBand.hide()
         if event.button() == Qt.LeftButton:
             if event.modifiers() & Qt.ControlModifier:
                 self.setCursor(Qt.OpenHandCursor)
