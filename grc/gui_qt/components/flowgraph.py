@@ -182,6 +182,7 @@ class FlowgraphScene(QtWidgets.QGraphicsScene, base.Component, CoreFlowgraph):
 
     def mouseDoubleClickEvent(self, event): # Will be used to open up dialog box of a block
         print("You double clicked on a block")
+        super(FlowgraphScene, self).mouseDoubleClickEvent(event)
 
 
 

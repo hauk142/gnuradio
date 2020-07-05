@@ -3,6 +3,7 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 
 from ....core.blocks.block import Block as CoreBlock
+from ..paramdialog import ParamDialog
 
 ARC        = 10  # arc radius for block corners
 LONG_VALUE = 20  # maximum length of a param string.
@@ -220,7 +221,8 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
         super(self.__class__, self).mouseReleaseEvent(e)
 
     def mouseDoubleClickEvent(self, e):
-        print("DETECTED DOUBLE CLICK!")
+        print(f"{self.params['id'].value} DETECTED DOUBLE CLICK!")
+        param_dialog = ParamDialog(self)
         super(self.__class__, self).mouseDoubleClickEvent(e)
 
 
