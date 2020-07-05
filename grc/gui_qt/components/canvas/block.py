@@ -160,7 +160,7 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
 
 
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
-
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
 
         '''
         layout = QtWidgets.QVBoxLayout()
@@ -185,7 +185,10 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
 
         # Draw main rectangle
         painter.setPen(QtGui.QPen(2))
-        painter.setBrush(QtGui.QBrush(QtGui.QColor(0xFA, 0xF8, 0xE0)))
+        if self.isSelected():
+            painter.setBrush(QtGui.QBrush(QtGui.QColor(0xAA, 0xF8, 0xE0)))
+        else:
+            painter.setBrush(QtGui.QBrush(QtGui.QColor(0xFA, 0xF8, 0xE0)))
         ARC = 10
         painter.drawRoundedRect(x, y, self.width-1, self.height, ARC, ARC);
 
@@ -193,11 +196,12 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
         painter.setFont(font)
         painter.drawText(QtCore.QRectF(x, y - self.height/2 + 10, self.width, self.height), Qt.AlignCenter, self.label)  # NOTE the 3rd/4th arg in  QRectF seems to set the bounding box of the text, so if there is ever any clipping, thats why
         
+        
         # Draw param text
         y_offset = 30 # params start 30 down from the top of the box
         for key, item in self.params.items():
             value = item.value
-            if value is not None and item.hide not in ('all','part'):
+            if item.hide not in ('all','part'):
                 if len(value) > LONG_VALUE:
                     value = value[:LONG_VALUE-3] + '...'
                 font.setBold(True)
