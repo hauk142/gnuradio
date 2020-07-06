@@ -123,7 +123,7 @@ class Block(Element):
 
         self.update_bus_logic()
         # disconnect hidden ports
-        self.parent_flowgraph.disconnect(*[p for p in self.ports() if p.hidden])
+        self.parent_flowgraph.disconnect_ports(*[p for p in self.ports() if p.hidden])
 
         self.active_sources = [p for p in self.sources if not p.hidden]
         self.active_sinks = [p for p in self.sinks if not p.hidden]
@@ -217,7 +217,7 @@ class Block(Element):
             nports = port.multiplicity
             for clone in port.clones[nports-1:]:
                 # Remove excess connections
-                self.parent_flowgraph.disconnect(clone)
+                self.parent_flowgraph.disconnect_ports(clone)
                 port.remove_clone(clone)
                 ports.remove(clone)
             # Add more cloned ports

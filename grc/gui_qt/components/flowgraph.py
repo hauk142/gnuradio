@@ -299,6 +299,14 @@ class Flowgraph(QtWidgets.QGraphicsView, base.Component): # added base.Component
 
     def initEmpty(self):
         self.setSceneRect(0,0,DEFAULT_MAX_X, DEFAULT_MAX_Y)
+    
+    def remove_selected(self):
+        changed = False
+        for element in self.scene.selectedItems():
+            self.scene.removeItem(element)
+            self.scene.remove_element(element)
+            changed = True
+        return changed
 
     def wheelEvent(self,  event):
         factor = 1.1;

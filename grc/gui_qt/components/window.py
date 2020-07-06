@@ -254,7 +254,7 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
         actions['cut'].setEnabled(False)
         actions['copy'].setEnabled(False)
         actions['paste'].setEnabled(False)
-        actions['delete'].setEnabled(False)
+        #actions['delete'].setEnabled(False)
         actions['rotate_ccw'].setEnabled(False)
         actions['rotate_cw'].setEnabled(False)
         actions['errors'].setEnabled(False)
@@ -472,6 +472,7 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
 
     def delete_triggered(self):
         log.debug('delete')
+        self.tabs.currentWidget().remove_selected()
 
     def rotate_ccw_triggered(self):
         log.debug('rotate_ccw')
