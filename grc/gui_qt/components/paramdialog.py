@@ -30,24 +30,25 @@ import six
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 
-class GeneralTab(QtWidgets.QWidget):
+class GeneralTab(QtWidgets.QScrollArea):
     def __init__(self, parent, block, *args, **kwargs):
         super(QtWidgets.QWidget, self).__init__(*args, **kwargs)
-        layout = QtWidgets.QGridLayout()
+        widget = QtWidgets.QWidget()
+        formlayout = QtWidgets.QFormLayout()
 
-        i = 0
         for key, item in block.params.items():
             if item.hide not in ('all','part'):
-                layout.addWidget(QtWidgets.QLabel(key), i, 0)
+                label = QtWidgets.QLabel(key)
                 if item.dtype == 'enum':
-                    combobox = QtWidgets.QComboBox()
+                    input = QtWidgets.QComboBox()
                     for key, val in item.options.items():
-                        combobox.addItem(val)
-                    layout.addWidget(combobox, i, 1)
+                        input.addItem(val)
                 else:
-                    layout.addWidget(QtWidgets.QLineEdit(item.value), i, 1)
-                i += 1
-        self.setLayout(layout)
+                    input = QtWidgets.QLineEdit(item.value)
+                formlayout.addRow(label, input)
+        widget.setLayout(formlayout)
+        self.setWidget(widget)
+        self.setWidgetResizable(True)
 
 class AdvancedTab(QtWidgets.QWidget):
     def __init__(self, block, *args, **kwargs):
