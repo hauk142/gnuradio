@@ -126,6 +126,7 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
         self.registerToolBar(toolbars["file"])
         self.registerToolBar(toolbars["edit"])
         self.registerToolBar(toolbars["run"])
+        self.registerToolBar(toolbars["search"])
 
         log.debug("Loading flowgraph model")
         test_flowgraph = os.path.join(self.settings.path.INSTALL, 'gui_qt/resources/data/rx_logo.grc')
@@ -363,6 +364,18 @@ class MainWindow(QtWidgets.QMainWindow, base.Component):
         run.addAction(actions['execute'])
         run.addAction(actions['kill'])
         toolbars['run'] = run
+
+        # TODO: Shrink the QLineEdit, align right
+        # TODO: Consider subclassing the QLineEdit here
+        # Search Toolbar
+        search = Toolbar("Search")
+        search_bar = QtWidgets.QLineEdit()
+        self.completer = QtWidgets.QCompleter()
+        self.completer.setCaseSensitivity(False)
+        self.completer.setFilterMode(QtCore.Qt.MatchContains)
+        search_bar.setCompleter(self.completer)
+        search.addWidget(search_bar)
+        toolbars['search'] = search
 
     def createStatusBar(self):
         log.debug("Creating status bar")

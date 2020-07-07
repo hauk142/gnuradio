@@ -154,6 +154,7 @@ class BlockLibrary(QtWidgets.QDockWidget, base.Component):
 
         log.info("Loading blocks")
         block_tree = {}
+        self.word_list = []
         for block in six.itervalues(self.app.platform.blocks):
             if block.category:
                 # Blocks with None category should be left out for whatever reason (e.g. not installed)
@@ -177,6 +178,7 @@ class BlockLibrary(QtWidgets.QDockWidget, base.Component):
                 # Sub_tree should now point at the final node of the block_tree that contains the block
                 # Add a reference to the block object to the proper subtree
                 sub_tree[block.label] = block
+                self.word_list.append(block.label)
         # Save a reference to the block tree in case it is needed later
         self._block_tree = block_tree
         return block_tree

@@ -72,6 +72,13 @@ class Application(QtWidgets.QApplication):
         self.BlockLibrary = components.BlockLibrary()
         stopwatch.lap('blocklibrary')
 
+        # Now that the library has been set up, enable autocomplete for the
+        # main window's block search bar
+        # TODO: Figure out if we can use BlockLibrary's QStandardItemModel instead
+        model = QtCore.QStringListModel()
+        model.setStringList(self.BlockLibrary.word_list)
+        self.MainWindow.completer.setModel(model)
+
         # Debug times
         log.debug("Loaded MainWindow controller - {:.4f}s".format(stopwatch.elapsed("mainwindow")))
         log.debug("Loaded Console component - {:.4f}s".format(stopwatch.elapsed("console")))
