@@ -115,7 +115,6 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
 
     #def __init__(self, block_key, block_label, attrib, params, parent):
     def __init__(self, parent, **n):
-        print("GUI BLOCK")
         #super(self.__class__, self).__init__(parent, **n)
         CoreBlock.__init__(self, parent)
         QtWidgets.QGraphicsItem.__init__(self)
