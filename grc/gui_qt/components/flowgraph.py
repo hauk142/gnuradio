@@ -309,7 +309,7 @@ class Flowgraph(QtWidgets.QGraphicsView, base.Component): # added base.Component
         return changed
 
     def wheelEvent(self,  event):
-        factor = 1.1;
+        factor = 1.1
         if event.angleDelta().y() < 0:
             factor = 1.0 / factor
         self.scale(factor, factor)
