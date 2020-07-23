@@ -183,7 +183,7 @@ class Block(QtWidgets.QGraphicsItem, CoreBlock):
         font.setBold(True)
 
         # Draw main rectangle
-        painter.setPen(QtGui.QPen(2))
+        painter.setPen(QtGui.QPen(1))
         if self.isSelected():
             painter.setBrush(QtGui.QBrush(QtGui.QColor(0xAA, 0xF8, 0xE0)))
         else:
