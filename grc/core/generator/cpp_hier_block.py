@@ -124,6 +124,9 @@ class CppHierBlockGenerator(CppTopBlockGenerator):
             )
         else:
             t['make'] = '{cls}()'.format(cls=block_id)
+        # Self-connect if there aren't any ports
+        if {len(data['inputs']), len(data['outputs'])} == {0}:
+            t['make'] += '\nthis->connect(this->${id});'
 
         # Callback data
         t['callbacks'] = [
